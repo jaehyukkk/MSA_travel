@@ -1,0 +1,83 @@
+#spring.application.name=travel_api_gatway
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global filter
+            preLogger: true
+            postLogger: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - http://localhost:8001
+            allow-credentials: true
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+      filter:
+        remove-non-proxy-headers:
+          headers:
+            - Proxy-Authenticate
+            - Proxy-Authorization
+            - Keep-Alive
+            - TE
+            - Trailer
+            - Transfer-Encoding
+      routes:
+        - id: ${spring.application.name}
+          uri: lb://${spring.application.name}
+          predicates:
+            - Path=/openapi/${spring.application.name}
+          filters:
+            - RewritePath=/openapi/${spring.application.name}, /openapi
+        - id: user
+          uri: lb://user
+          predicates:
+            - Path=/openapi/user, /api/*/user/**
+        - id: search
+          uri: lb://search
+          predicates:
+            - Path=/openapi/search, /api/*/search/**
+
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 5s
+
+server:
+  port: 8000
+  shutdown: graceful
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include:
+#          - "gateway"
+#  endpoint:
+#    gateway:
+#      enabled: true
+#    health:
+#      show-details: always
+
+jwt:
+  secret: dGhpcy1pcy1hLXNwcmluZ2Jvb3Qtc2VjdXJpdHktd2l0aC1teXBvcy1hZG1pbi1wcm9qZWN0LWNyZWF0ZWQtYnktaGVvbnlLaW0K
+
+springdoc.api-docs.path : /openapi
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
