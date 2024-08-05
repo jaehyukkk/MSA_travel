@@ -32,6 +32,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation ("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.6")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 
 	// 코틀린 lazy 로딩 이슈 관련
 	implementation("org.jetbrains.kotlin:kotlin-allopen:1.6.0")
@@ -51,6 +52,9 @@ dependencies {
 	//swagger
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.12")
 	implementation("org.springdoc:springdoc-openapi-kotlin:1.6.9")
+
+	//json
+	implementation("com.google.code.gson:gson:2.10.1")
 
 	//test
 	testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
