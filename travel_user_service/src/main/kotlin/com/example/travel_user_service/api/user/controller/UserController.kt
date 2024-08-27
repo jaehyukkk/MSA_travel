@@ -1,9 +1,6 @@
 package com.example.travel_user_service.api.user.controller
 
-import com.example.travel_user_service.api.user.domain.dto.LoginRequestDto
-import com.example.travel_user_service.api.user.domain.dto.RegisterRequestDto
-import com.example.travel_user_service.api.user.domain.dto.TokenResponseDto
-import com.example.travel_user_service.api.user.domain.dto.UserResponseDto
+import com.example.travel_user_service.api.user.domain.dto.*
 import com.example.travel_user_service.api.user.domain.entity.User
 import com.example.travel_user_service.api.user.service.UserService
 import com.example.travel_user_service.context.CustomSecurityContextHolder
@@ -28,6 +25,11 @@ class UserController(
     @PostMapping("/login")
     fun login(@RequestBody loginRequestDto: LoginRequestDto): ResponseEntity<TokenResponseDto> {
         return ResponseEntity.ok(userService.login(loginRequestDto))
+    }
+
+    @PostMapping("/refresh")
+    fun refresh(@RequestBody refreshTokenReqeustDto: RefreshTokenReqeustDto) : ResponseEntity<TokenResponseDto> {
+        return ResponseEntity.ok(userService.refresh(refreshTokenReqeustDto))
     }
 
 //    @GetMapping("/test")

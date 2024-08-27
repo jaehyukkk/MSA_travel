@@ -1,11 +1,13 @@
 package com.example.travel_user_service.api.user.service
 
 import com.example.travel_user_service.api.user.domain.dto.LoginRequestDto
+import com.example.travel_user_service.api.user.domain.dto.RefreshTokenReqeustDto
 import com.example.travel_user_service.api.user.domain.dto.RegisterRequestDto
 import com.example.travel_user_service.api.user.domain.dto.TokenResponseDto
 import com.example.travel_user_service.api.user.domain.entity.User
 import com.example.travel_user_service.api.user.domain.repository.UserRepository
 import com.example.travel_user_service.provider.TokenProvider
+import com.example.travel_user_service.util.RedisUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -32,6 +34,9 @@ class UserServiceTest{
 
     @Mock
     private lateinit var tokenProvider: TokenProvider
+
+    @Mock
+    private lateinit var redisUtil: RedisUtil
 
     @Mock
     private lateinit var authenticationManager: AuthenticationManager
@@ -81,6 +86,7 @@ class UserServiceTest{
 
         verify(authenticationManager).authenticate(authenticationToken)
         verify(tokenProvider).generateTokenDto(authentication)
+        verify(redisUtil).setValues(any(),any(),any(),any())
 
         assertEquals(result.grantType, tokenResponseDto.grantType)
         assertEquals(result.accessToken, tokenResponseDto.accessToken)
@@ -88,4 +94,46 @@ class UserServiceTest{
         assertEquals(result.accessTokenExpiresIn, tokenResponseDto.accessTokenExpiresIn)
         assertEquals(result.refreshTokenExpiresIn, tokenResponseDto.refreshTokenExpiresIn)
     }
+
+    @Test
+    fun `User Refresh Test`() {
+        // Given
+        val refreshTokenRequestDto = RefreshTokenReqeustDto(
+            accessToken = "accessToken",
+            refreshToken = "refreshToken"
+        )
+
+        val tokenResponseDto = TokenResponseDto(
+            grantType = "testGrantType",
+            accessToken = "newAccessToken",
+            refreshToken = "refreshToken",
+            accessTokenExpiresIn = 1000,
+            refreshTokenExpiresIn = 2000
+        )
+
+        val authentication = mock(Authentication::class.java)
+        `when`(authentication.name).thenReturn("test123")
+        `when`(tokenProvider.validateToken(refreshTokenRequestDto.refreshToken)).thenReturn(true)
+        `when`(tokenProvider.getAuthentication(refreshTokenRequestDto.accessToken)).thenReturn(authentication)
+        `when`(redisUtil.getValues("RTK:test123")).thenReturn(refreshTokenRequestDto.refreshToken)
+
+        `when`(tokenProvider.generateTokenDto(authentication)).thenReturn(tokenResponseDto)
+
+        // When
+        val result = userService.refresh(refreshTokenRequestDto)
+
+        // Then
+        verify(tokenProvider).validateToken(refreshTokenRequestDto.refreshToken)
+        verify(tokenProvider).getAuthentication(refreshTokenRequestDto.accessToken)
+        verify(redisUtil).getValues("RTK:test123")
+        verify(tokenProvider).generateTokenDto(authentication)
+
+        assertEquals(result.grantType, tokenResponseDto.grantType)
+        assertEquals(result.accessToken, tokenResponseDto.accessToken)
+        assertEquals(result.refreshToken, tokenResponseDto.refreshToken)
+        assertEquals(result.accessTokenExpiresIn, tokenResponseDto.accessTokenExpiresIn)
+        assertEquals(result.refreshTokenExpiresIn, tokenResponseDto.refreshTokenExpiresIn)
+    }
+
+
 }

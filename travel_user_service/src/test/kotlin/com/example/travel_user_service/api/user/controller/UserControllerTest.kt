@@ -1,13 +1,8 @@
 package com.example.travel_user_service.api.user.controller
 
-import com.example.travel_user_service.api.user.domain.dto.LoginRequestDto
-import com.example.travel_user_service.api.user.domain.dto.RegisterRequestDto
-import com.example.travel_user_service.api.user.domain.dto.TokenResponseDto
-import com.example.travel_user_service.api.user.domain.dto.UserResponseDto
-import com.example.travel_user_service.api.user.domain.entity.User
+import com.example.travel_user_service.api.user.domain.dto.*
 import com.example.travel_user_service.api.user.service.UserService
 import com.google.gson.Gson
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -80,6 +75,37 @@ class UserControllerTest{
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.grantType").value("testGrantType"))
             .andExpect(jsonPath("$.accessToken").value("testAccessToken"))
+            .andExpect(jsonPath("$.refreshToken").value("testRefreshToken"))
+            .andExpect(jsonPath("$.accessTokenExpiresIn").value(1000))
+            .andExpect(jsonPath("$.refreshTokenExpiresIn").value(2000))
+            .andReturn()
+    }
+
+    @Test
+    fun `Refresh Token Test`() {
+        // Given
+        val refreshTokenRequestDto = RefreshTokenReqeustDto(
+            accessToken = "testAccessToken",
+            refreshToken = "testRefreshToken"
+        )
+
+        // When
+        `when`(userService.refresh(any())).thenReturn(TokenResponseDto(
+            grantType = "testGrantType",
+            accessToken = "newAccessToken",
+            refreshToken = "testRefreshToken",
+            accessTokenExpiresIn = 1000,
+            refreshTokenExpiresIn = 2000
+        ))
+
+        // Then
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/api/v1/user/refresh")
+                .content(Gson().toJson(refreshTokenRequestDto))
+                .contentType("application/json"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.grantType").value("testGrantType"))
+            .andExpect(jsonPath("$.accessToken").value("newAccessToken"))
             .andExpect(jsonPath("$.refreshToken").value("testRefreshToken"))
             .andExpect(jsonPath("$.accessTokenExpiresIn").value(1000))
             .andExpect(jsonPath("$.refreshTokenExpiresIn").value(2000))
