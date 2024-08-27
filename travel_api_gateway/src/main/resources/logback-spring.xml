@@ -1,0 +1,52 @@
+<configuration>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{correlationId}] %logger{36} - %msg%n"/>
+
+    <property name="LOGS_ABSOLUTE_PATH" value="./logs" />
+
+    <springProfile name="local, dev">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            </layout>
+        </appender>
+    </springProfile>
+
+    <springProfile name="dev">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOGS_ABSOLUTE_PATH}/logback.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>logFile.%d{yyyy-MM-dd}.json</fileNamePattern>
+                <maxHistory>30</maxHistory>
+                <totalSizeCap>3GB</totalSizeCap>
+            </rollingPolicy>
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+        </appender>
+    </springProfile>
+
+    <springProfile name="dev">
+        <logger name="root" level="INFO" />
+        <logger name="com.example.travel_api_gateway.filter" level="INFO" />
+        <logger name="org.springframework" level="INFO" />
+        <logger name="com.example.travel_api_gateway" level="INFO" />
+    </springProfile>
+
+    <springProfile name="local">
+        <logger name="root" level="DEBUG" />
+        <logger name="org.springframework" level="DEBUG" />
+        <logger name="com.example.travel_api_gateway" level="DEBUG" />
+    </springProfile>
+
+
+    <root>
+        <springProfile name="dev, local">
+            <appender-ref ref="STDOUT" />
+        </springProfile>
+
+        <springProfile name="dev">
+            <appender-ref ref="FILE" />
+        </springProfile>
+    </root>
+</configuration>
