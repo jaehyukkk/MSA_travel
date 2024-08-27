@@ -1,10 +1,12 @@
 package com.example.travel_api_gatway.filter;
 
+import com.example.travel_api_gatway.context.CustomSecurityContext;
+import com.example.travel_api_gatway.context.CustomSecurityContextHolder;
 import com.example.travel_api_gatway.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
-import lombok.Data;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -14,9 +16,8 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> {
+public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> implements Ordered {
     private final JwtUtil jwtUtil;
-
     public GlobalFilter(JwtUtil jwtUtil) {
         super(Config.class);
         this.jwtUtil = jwtUtil;
@@ -49,10 +50,20 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
 
                 Claims claims = jwtUtil.getAllClaimsFromToken(jwt);
 
+                String subject = claims.getSubject();
+                String username = claims.get("username", String.class);
+                String roles = String.join(",", claims.get("roles", String.class));
+
+                CustomSecurityContextHolder.setContext(CustomSecurityContext.builder()
+                        .id(Long.parseLong(subject))
+                        .username(username)
+                        .roles(roles)
+                        .build());
+
                 ServerHttpRequest modifiedRequest = request.mutate()
-                        .header("X-Id", claims.getSubject())
-                        .header("X-Username", claims.get("username", String.class))
-                        .header("X-Roles", String.join(",", claims.get("roles", String.class)))
+                        .header("X-Id", subject)
+                        .header("X-Username", username)
+                        .header("X-Roles", roles)
                         .build();
 
                 return chain.filter(exchange.mutate().request(modifiedRequest).build());
@@ -78,4 +89,8 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
         }
     }
 
+    @Override
+    public int getOrder() {
+        return 0;
+    }
 }
