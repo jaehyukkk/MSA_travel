@@ -1,11 +1,7 @@
 spring:
   application:
     name: search
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://127.0.0.1:3306/travel_search?characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
-    password: 523108zz
+
   jpa:
     open-in-view: true
     hibernate:
@@ -15,18 +11,50 @@ spring:
         format_sql: true #To beautify or pretty print the SQL
         show_sql: true #show sql
 
+
+  batch:
+    job:
+      enabled: true
+#    jdbc:
+#      initialize-schema: always
+
 server:
   port: 8002
 
+
+openapi:
+  service:
+    title: travel-search doc #title that you will want to display in the swagger ui
+    version: 1.0.0
+#    url: http://localhost:8000 #api gateway url
+    url: http://localhost:8002 #api gateway url
+
 springdoc.api-docs.path: /openapi/${spring.application.name} #these urls will used to load the swagger ui of this service by the api gateway
 
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    hostname: localhost
+
+---
+spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  profiles:
+    active: local
+
+#eureka:
+#  client:
+#    enabled: false
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
+#  instance:
+#    hostname: localhost
+
+#logging:
+#  level:
+#    org.elasticsearch.client: DEBUG
+#    org.elasticsearch.client.RestClient: TRACE
 
 

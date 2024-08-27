@@ -1,0 +1,13 @@
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 523108zz
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://127.0.0.1:3306/traval_user?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 523108zz
+
+

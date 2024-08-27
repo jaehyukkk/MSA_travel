@@ -1,0 +1,29 @@
+spring.cloud.gateway:
+  globalcors:
+    cors-configurations:
+      '[/**]':
+        allowedOrigins:
+          - http://host.minikube.internal:3000
+          - http://${MY_LOCAL_HOST}:3000
+          - http://localhost:3000
+        allow-credentials: true
+        allowedHeaders: '*'
+        allowedMethods:
+          - PUT
+          - GET
+          - POST
+          - DELETE
+          - OPTIONS
+  routes:
+    - id: user
+      uri: http://user-service:8001
+      predicates:
+        - Path=/api/*/user/**
+    - id: search
+      uri: http://search-service:8002
+      predicates:
+        - Path=/api/*/search/**
+    - id: reservation
+      uri: http://reservation-service:8003
+      predicates:
+        - Path=/api/*/reservation/**

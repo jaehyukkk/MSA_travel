@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${MY_LOCAL_HOST}:3306/travel_reservation?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 523108zz
+

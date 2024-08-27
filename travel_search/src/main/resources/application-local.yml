@@ -1,0 +1,26 @@
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 523108zz
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password: changeme
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://127.0.0.1:3306/travel_search?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 523108zz
+
+api-server:
+  host: 127.0.0.1
+  port: 5000
+  url: http://127.0.0.1:5000
+
+
+kafka-server:
+  host: 127.0.0.1
+  port: 29092
+  url: http://127.0.0.1:29092
