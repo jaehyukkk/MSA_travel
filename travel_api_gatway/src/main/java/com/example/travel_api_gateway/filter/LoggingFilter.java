@@ -1,13 +1,11 @@
-package com.example.travel_api_gatway.filter;
+package com.example.travel_api_gateway.filter;
 
-import com.example.travel_api_gatway.context.CustomSecurityContext;
-import com.example.travel_api_gatway.context.CustomSecurityContextHolder;
+import com.example.travel_api_gateway.context.CustomSecurityContext;
+import com.example.travel_api_gateway.context.CustomSecurityContextHolder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;

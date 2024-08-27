@@ -1,4 +1,4 @@
-package com.example.travel_api_gatway.context;
+package com.example.travel_api_gateway.context;
 
 public class CustomSecurityContextHolder {
     private static final ThreadLocal<CustomSecurityContext> contextHolder = new ThreadLocal<>();

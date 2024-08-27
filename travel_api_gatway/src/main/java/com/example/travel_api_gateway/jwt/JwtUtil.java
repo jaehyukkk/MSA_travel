@@ -1,4 +1,4 @@
-package com.example.travel_api_gatway.jwt;
+package com.example.travel_api_gateway.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

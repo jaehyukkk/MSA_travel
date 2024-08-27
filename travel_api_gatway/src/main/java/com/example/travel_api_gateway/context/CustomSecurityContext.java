@@ -1,9 +1,8 @@
-package com.example.travel_api_gatway.context;
+package com.example.travel_api_gateway.context;
 
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
 @Data
 public class CustomSecurityContext {
     private Long id;

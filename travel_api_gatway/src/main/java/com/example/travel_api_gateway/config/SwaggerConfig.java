@@ -1,4 +1,4 @@
-package com.example.travel_api_gatway.config;
+package com.example.travel_api_gateway.config;
 
 import org.springdoc.core.properties.SwaggerUiConfigParameters;
 import org.springframework.boot.CommandLineRunner;

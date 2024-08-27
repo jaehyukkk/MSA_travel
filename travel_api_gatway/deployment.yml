@@ -19,7 +19,7 @@ spec:
       spec:
         containers:
         - name: gateway-service
-          image: ghcr.io/jaehyukkk/gayeway_service
+          image: ghcr.io/jaehyukkk/gateway_service
           ports:
           - containerPort: 8000
           volumeMounts:

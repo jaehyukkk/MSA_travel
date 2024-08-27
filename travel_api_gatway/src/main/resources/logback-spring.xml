@@ -28,15 +28,15 @@
 
     <springProfile name="dev">
         <logger name="root" level="INFO" />
-        <logger name="com.example.travel_api_gatway.filter" level="INFO" />
+        <logger name="com.example.travel_api_gateway.filter" level="INFO" />
         <logger name="org.springframework" level="INFO" />
-        <logger name="com.example.travel_api_gatway" level="INFO" />
+        <logger name="com.example.travel_api_gateway" level="INFO" />
     </springProfile>
 
     <springProfile name="local">
         <logger name="root" level="INFO" />
         <logger name="org.springframework" level="INFO" />
-        <logger name="com.example.travel_api_gatway" level="DEBUG" />
+        <logger name="com.example.travel_api_gateway" level="DEBUG" />
     </springProfile>
 
 

@@ -1,4 +1,4 @@
-package com.example.travel_api_gatway.dto;
+package com.example.travel_api_gateway.dto;
 
 import lombok.Data;
 

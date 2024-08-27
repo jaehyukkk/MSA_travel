@@ -1,8 +1,8 @@
-package com.example.travel_api_gatway.filter;
+package com.example.travel_api_gateway.filter;
 
-import com.example.travel_api_gatway.context.CustomSecurityContext;
-import com.example.travel_api_gatway.context.CustomSecurityContextHolder;
-import com.example.travel_api_gatway.jwt.JwtUtil;
+import com.example.travel_api_gateway.context.CustomSecurityContext;
+import com.example.travel_api_gateway.context.CustomSecurityContextHolder;
+import com.example.travel_api_gateway.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;

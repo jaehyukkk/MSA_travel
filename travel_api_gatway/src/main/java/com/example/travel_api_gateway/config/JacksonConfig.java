@@ -1,4 +1,4 @@
-package com.example.travel_api_gatway.config;
+package com.example.travel_api_gateway.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
