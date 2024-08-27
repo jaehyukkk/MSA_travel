@@ -15,7 +15,6 @@ class RestTemplateConfig(
     @Bean
     fun restTemplate(): RestTemplate {
         val restTemplateBuilder = RestTemplateBuilder().build()
-//        val restTemplate = restTemplateBuilder.build()
         val messageConverters = restTemplateBuilder.messageConverters
 
         messageConverters.add(0, MappingJackson2HttpMessageConverter(objectMapper))
