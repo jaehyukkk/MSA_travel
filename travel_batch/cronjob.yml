@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: flight-batch-job
+spec:
+  schedule: "0 0 * * *" # 매일 자정에 실행
+#  schedule: "*/1 * * * *" # 매 분마다 실행
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: batch-job-container
+              image: ghcr.io/jaehyukkk/flight-batch-job:latest
+              imagePullPolicy: Always
+              env:
+                - name: MY_LOCAL_HOST
+                  value: "host.minikube.internal"
+          restartPolicy: OnFailure
+          imagePullSecrets:
+            - name: ghcr-login-secret
