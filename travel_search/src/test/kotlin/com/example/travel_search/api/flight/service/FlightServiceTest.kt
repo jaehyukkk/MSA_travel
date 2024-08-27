@@ -2,12 +2,16 @@ package com.example.travel_search.api.flight.service
 
 import com.example.travel_search.api.flight.domain.dto.FlightDto
 import com.example.travel_search.api.flight.domain.dto.FlightSearchRequestDto
+import com.example.travel_search.api.kafka.service.KafkaProducerService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.client.MockRestServiceServer
@@ -27,6 +31,9 @@ class FlightServiceTest {
 
     private lateinit var mockServer: MockRestServiceServer
 
+    @MockBean
+    private lateinit var kafkaProducerService: KafkaProducerService
+
     @BeforeEach
     fun setUp() {
         mockServer = MockRestServiceServer.createServer(restTemplate)
@@ -36,10 +43,10 @@ class FlightServiceTest {
     fun `test searchFlight returns flight data`() {
         // Given
         val flightSearchRequestDto = FlightSearchRequestDto("SEL", "KIX", "20240814", 1)
-        val flightDto = FlightDto("김포국제공항", "190,000", "11:00", "13:00")
+        val flightDto = FlightDto("김포국제공항", 190000, "11:00", "13:00")
 
-        val uri = "http://localhost:5000/api/flights?startCode=SEL&endCode=KIX&date=20240814&adult=1"
-        val expectResult = "[{\"airline_name\":\"김포국제공항\",\"price\":\"190,000\",\"start_route\":\"11:00\",\"end_route\":\"13:00\"}]"
+        val uri = "http://localhost:5000/api/flights?startCode=SEL&endCode=KIX&date=20240814&adult=1&child=0"
+        val expectResult = "[{\"airline_name\":\"김포국제공항\",\"price\":\"190000\",\"start_route\":\"11:00\",\"end_route\":\"13:00\"}]"
 
         mockServer.expect(requestTo(uri))
             .andRespond(withSuccess(expectResult, MediaType.APPLICATION_JSON))
@@ -53,5 +60,8 @@ class FlightServiceTest {
         assertEquals(flightDto.price, result?.get(0)?.price)
         assertEquals(flightDto.startRoute, result?.get(0)?.startRoute)
         assertEquals(flightDto.endRoute, result?.get(0)?.endRoute)
+
+        verify(kafkaProducerService).sendMessage(any(), any())
+
     }
 }
