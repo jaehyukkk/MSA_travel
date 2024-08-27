@@ -30,7 +30,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	implementation ("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.6")
+//	implementation ("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.6")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
 	// 코틀린 lazy 로딩 이슈 관련
@@ -60,8 +60,6 @@ dependencies {
 
 	//redis
 	implementation ("org.springframework.boot:spring-boot-starter-data-redis")
-
-
 
 	//json
 	implementation("com.google.code.gson:gson:2.10.1")
