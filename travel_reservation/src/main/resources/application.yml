@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: reservation
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true #To beautify or pretty print the SQL
+        show_sql: true #show sql
+
+
+  batch:
+    job:
+      enabled: true
+#    jdbc:
+#      initialize-schema: always
+
+server:
+  port: 8003
+
+
+openapi:
+  service:
+    title: travel-reservation doc #title that you will want to display in the swagger ui
+    version: 1.0.0
+    url: http://localhost:8003 #api gateway url
+
+springdoc.api-docs.path: /openapi/${spring.application.name} #these urls will used to load the swagger ui of this service by the api gateway
+
+
+---
+spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  profiles:
+    active: local
+
+#eureka:
+#  client:
+#    enabled: false
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
+#  instance:
+#    hostname: localhost
+
+#logging:
+#  level:
+#    org.elasticsearch.client: DEBUG
+#    org.elasticsearch.client.RestClient: TRACE
+
+
