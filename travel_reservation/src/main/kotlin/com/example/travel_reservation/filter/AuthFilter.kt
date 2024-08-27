@@ -1,7 +1,7 @@
-package com.example.travel_user_service.filter
+package com.example.travel_reservation.filter
 
-import com.example.travel_user_service.context.CustomSecurityContext
-import com.example.travel_user_service.context.CustomSecurityContextHolder
+import com.example.travel_reservation.context.CustomSecurityContext
+import com.example.travel_reservation.context.CustomSecurityContextHolder
 import org.springframework.stereotype.Component
 import javax.servlet.*
 import javax.servlet.http.HttpServletRequest
