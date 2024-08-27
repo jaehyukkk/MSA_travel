@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reservation-service
+  labels:
+    app: reservation-service
+
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        run: reservation-service
+        app: reservation-service
+  template:
+      metadata:
+        labels:
+            run: reservation-service
+            app: reservation-service
+      spec:
+        containers:
+        - name: reservation-service
+          image: ghcr.io/jaehyukkk/reservation-service:latest
+          ports:
+          - containerPort: 8003
+          env:
+            - name: MY_LOCAL_HOST
+              value: "host.minikube.internal"
+
+        imagePullSecrets:
+          - name: ghcr-login-secret
+

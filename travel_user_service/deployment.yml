@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        run: user-service
+        app: user-service
+  template:
+      metadata:
+        labels:
+            run: user-service
+            app: user-service
+      spec:
+        containers:
+        - name: user-service
+          image: ghcr.io/jaehyukkk/user-service:latest
+          ports:
+          - containerPort: 8001
+          env:
+            - name: MY_LOCAL_HOST
+              value: "host.minikube.internal"
+
+        imagePullSecrets:
+          - name: ghcr-login-secret
+

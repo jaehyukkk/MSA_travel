@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-service
+  labels:
+    app: search-service
+
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        run: search-service
+        app: search-service
+  template:
+      metadata:
+        labels:
+            run: search-service
+            app: search-service
+      spec:
+        containers:
+        - name: search-service
+          image: ghcr.io/jaehyukkk/search-service:latest
+          ports:
+          - containerPort: 8002
+          env:
+            - name: MY_LOCAL_HOST
+              value: "host.minikube.internal"
+
+        imagePullSecrets:
+          - name: ghcr-login-secret
+
