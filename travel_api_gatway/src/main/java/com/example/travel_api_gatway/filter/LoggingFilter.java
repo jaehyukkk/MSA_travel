@@ -90,7 +90,6 @@ public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Co
     }
 
     private String generateCorrelationId() {
-        // UUID 등을 사용해 고유한 ID 생성
         return UUID.randomUUID().toString();
     }
 
