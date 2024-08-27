@@ -5,6 +5,7 @@ import com.example.travel_api_gatway.context.CustomSecurityContextHolder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -22,11 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Log4j2
 @Component
 public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Config> implements Ordered {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
 
     public LoggingFilter() {
         super(Config.class);
@@ -73,7 +74,7 @@ public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Co
                 logData.put("queryParams", getJsonQueryParams(queryParams));
             }
 
-            logger.info("##Request Log: {}", logData);
+            log.info("##Request Log: {}", logData);
         }
     }
 
@@ -84,7 +85,7 @@ public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Co
             logData.put("statusCode", response.getStatusCode());
             logData.put("responseHeaders", response.getHeaders());
             logData.put("correlationId", correlationId);
-            logger.info("##Response Log: {}", logData);
+            log.info("##Response Log: {}", logData);
         }
     }
 
