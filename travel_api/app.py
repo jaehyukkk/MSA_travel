@@ -53,7 +53,6 @@ class Flight:
 
 
 def get_webdriver():
-    # WebDriver 설정을 함수로 분리하여 재사용 가능하게 합니다.
     return webdriver.Chrome()
 
 
@@ -78,7 +77,7 @@ def get_flights():
 
         for parent_element in parent_div_elements:
             airline_name = ""
-            price = ""
+            price = 0
             start_route = ""
             end_route = ""
 
@@ -86,7 +85,7 @@ def get_flights():
             route_airport_elements = parent_element.find_elements(By.XPATH, ".//*[contains(@class, 'route_airport')]")
             item_num = parent_element.find_element(By.XPATH, ".//*[contains(@class, 'item_num')]")
             airline_name = airline_name_element.text
-            price = item_num.text
+            price = item_num.text.replace(',', '')
             for i, route_airport_element in enumerate(route_airport_elements):
                 route_time = route_airport_element.find_element(By.XPATH, ".//*[contains(@class, 'route_time')]")
                 if i == 0:
@@ -98,48 +97,16 @@ def get_flights():
             if len(flights) == 100:
                 break
 
+    except Exception as e:
+        print(e)
+        print('Error occurred while scraping')
     finally:
         driver.quit()
         return jsonify([flight.to_dict() for flight in flights])
 
 
-@app.route('/api/categoriess', methods=['GET'])
-def get_categories():
-    browser_url = "https://flight.naver.com/flights/international/SEL-KIX-20240814?adult=1&fareType=Y"
-    driver = get_webdriver()
-    airports = []
-
-    try:
-        driver.get(browser_url)
-        time.sleep(5)
-        dropdown_btn = driver.find_element(By.XPATH, "//button[contains(@class, 'tabContent_route')]")
-        dropdown_btn.click()
-        time.sleep(0.5)
-        section = driver.find_element(By.CSS_SELECTOR, "section.section > section.section")
-        buttons = section.find_elements(By.CSS_SELECTOR, "button")
-
-        for i, button in enumerate(buttons):
-            airports.append(Category(button.text, []))
-            button.click()
-
-        autocomplete_list = section.find_elements(By.XPATH, "//div[contains(@class, 'autocomplete_list')]")
-
-        for i, autocomplete in enumerate(autocomplete_list):
-            airport_list = autocomplete.find_elements(By.CSS_SELECTOR, "button")
-            for ap in airport_list:
-                location = ap.find_element(By.CSS_SELECTOR, "i[class*='autocomplete_location']")
-                code = ap.find_element(By.CSS_SELECTOR, "i[class*='autocomplete_code']")
-                name = ap.find_element(By.CSS_SELECTOR, "span[class*='autocomplete_airport']")
-                print(location.text.split(',')[0], code.text, name.text)
-                airports[i].airports.append(Airport(location.text.split(',')[0], code.text, name.text))
-    finally:
-        driver.quit()
-        return jsonify([airport.to_dict() for airport in airports])
-
-
-# @app.route('/api/airport/info', methods=['GET'])
 @app.route('/api/categories', methods=['GET'])
-def get_airport_info():
+def get_categories():
     options = Options()
     # 새로운 사용자 데이터 디렉터리 생성
     options.add_argument("--incognito")  # 시크릿 모드로 시작
