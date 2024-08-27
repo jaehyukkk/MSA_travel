@@ -35,7 +35,6 @@ public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Co
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            // 비동기환경에서 쓰레드 ID 대신 고유한 ID를 생성하여 사용
             String correlationId = generateCorrelationId();
             MDC.put("correlationId", correlationId);
 
