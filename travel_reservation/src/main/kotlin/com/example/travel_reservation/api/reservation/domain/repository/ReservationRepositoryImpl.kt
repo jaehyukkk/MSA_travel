@@ -8,33 +8,24 @@ import com.example.travel_reservation.api.reservation.domain.dto.ReservationList
 import com.example.travel_reservation.api.reservation.domain.dto.ReservationSearchRequestDto
 import com.example.travel_reservation.api.reservation.domain.entity.QReservation.reservation
 import com.example.travel_reservation.api.reservation.enums.ReservationSearchOption
-import com.example.travel_reservation.api.reservation.enums.ReservationStatus
-import com.example.travel_reservation.exception.BaseException
-import com.example.travel_reservation.exception.ErrorCode
-import com.example.travel_reservation.global.enums.Gender
 import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.set
-import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions
-import com.querydsl.jpa.hibernate.HibernateQueryFactory
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.support.PageableExecutionUtils
 import org.springframework.stereotype.Repository
-import java.time.LocalDateTime
 
 @Repository
 class ReservationRepositoryImpl(
     private val queryFactory: JPAQueryFactory
 ) : ReservationRepositoryCustom{
-//    CaseBuilder().`when`(dispatch.status.eq(DispatchStatus.COMPLETED)).then(dispatch.originalPrice).otherwise(0).sum(),
 
-//    constant
     override fun getUserReservationList(userId: Long, pageable: Pageable, reservationSearchRequestDto: ReservationSearchRequestDto): Page<ReservationListResponseDto> {
         val query = queryFactory.select(
             QReservationListResponseDto(
