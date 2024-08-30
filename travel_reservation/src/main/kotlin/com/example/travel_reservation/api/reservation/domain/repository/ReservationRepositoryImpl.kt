@@ -74,7 +74,7 @@ class ReservationRepositoryImpl(
             .orderBy(reservation.id.desc())
             .fetch()
 
-        val count = queryFactory.select(reservation.id)
+        val count = queryFactory.select(reservation.id.count())
             .from(reservation)
             .fetchFirst()
 
